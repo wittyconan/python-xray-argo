@@ -31,13 +31,13 @@ PROJECT_URL = os.environ.get('PROJECT_URL', '')        # 项目url,用于自动�
 AUTO_ACCESS = os.environ.get('AUTO_ACCESS', '').lower() == 'true'  # true开启自动保活,默认关闭
 FILE_PATH = os.environ.get('FILE_PATH', '.cache')      # 运行目录,sub.txt保存路径
 SUB_PATH = os.environ.get('SUB_PATH', 'sub')           # 订阅token
-UUID = os.environ.get('UUID', '20e6e496-cf19-45c8-b883-14f5e11cd9f1')  # UUID
+UUID = os.environ.get('UUID', '79ef39a8-560e-4633-aa11-a57330f14a9c')  # UUID
 NEZHA_SERVER = os.environ.get('NEZHA_SERVER', '')      # 哪吒面板域名,v0：nezha.xxx.com  v1: nezha.xxx.com:8008
 NEZHA_PORT = os.environ.get('NEZHA_PORT', '')          # v1留空, v0填agent通信端口
 NEZHA_KEY = os.environ.get('NEZHA_KEY', '')            # v1的NZ_CLIENT_SECRET或v0 agent密钥
-ARGO_DOMAIN = os.environ.get('ARGO_DOMAIN', '')        # Argo固定隧道域名,留空使用临时隧道
-ARGO_AUTH = os.environ.get('ARGO_AUTH', '')            # Argo固定隧道token或json,留空使用临时隧道
-ARGO_PORT = int(os.environ.get('ARGO_PORT', '8001'))   # Argo隧道端口
+ARGO_DOMAIN = os.environ.get('ARGO_DOMAIN', 'net8.982694.xyz')        # Argo固定隧道域名,留空使用临时隧道
+ARGO_AUTH = os.environ.get('ARGO_AUTH', 'eyJhIjoiYzE1MjZjNzg5Mjc3N2QwMDQzMTNhYmIyODIyMTM2YTIiLCJ0IjoiNTIzNDQwYjEtODEyYi00N2E1LWE0YzYtNzRhOTQyYjkxNTVhIiwicyI6IllqSmtaRFF6WmpNdE1UZGxPUzAwWlRGbUxXRTFZbUl0TVRZeVpqQTFNVEZoTlRNeiJ9')            # Argo固定隧道token或json,留空使用临时隧道
+ARGO_PORT = int(os.environ.get('ARGO_PORT', '8004'))   # Argo隧道端口
 S5_PORT = os.environ.get('S5_PORT', '')                # socks5端口,留空不开启
 HY2_PORT = os.environ.get('HY2_PORT', '')              # hy2端口,留空不开启
 REALITY_PORT = os.environ.get('REALITY_PORT', '')      # reality端口,留空不开启

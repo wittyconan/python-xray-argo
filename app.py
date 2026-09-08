@@ -10,7 +10,6 @@ import base64
 import random
 import string
 import shutil
-import asyncio
 import platform
 import signal
 import threading
@@ -297,23 +296,35 @@ def download_file(file_name, file_url):
 def download_all_files():
     """下载所需二进制文件"""
     architecture = get_system_architecture()
-    base_url = 'https://arm64.ssss.nyc.mn' if architecture == 'arm' else 'https://amd64.ssss.nyc.mn'
+    if architecture == 'arm':
+        base_urls = ['https://arm64.oooen.com', 'https://arm64.ssss.nyc.mn']
+    else:
+        base_urls = ['https://amd64.oooen.com', 'https://amd64.ssss.nyc.mn']
 
     downloads = [
-        {'name': web_name, 'url': f'{base_url}/web'},
-        {'name': bot_name, 'url': f'{base_url}/bot'},
+        {'name': web_name, 'path': 'web'},
+        {'name': bot_name, 'path': 'bot'},
     ]
 
     if NEZHA_SERVER and NEZHA_KEY:
         if NEZHA_PORT:
-            downloads.append({'name': npm_name, 'url': f'{base_url}/agent'})
+            downloads.append({'name': npm_name, 'path': 'agent'})
         else:
-            downloads.append({'name': php_name, 'url': f'{base_url}/v1'})
+            downloads.append({'name': php_name, 'path': 'v1'})
     else:
         log('NEZHA variable is empty, skipping nezha-agent')
 
     for item in downloads:
-        download_file(item['name'], item['url'])
+        downloaded = False
+        for index, base_url in enumerate(base_urls):
+            url = f'{base_url}/{item["path"]}'
+            if download_file(item['name'], url):
+                downloaded = True
+                break
+            if index + 1 < len(base_urls):
+                log(f'Retrying {item["name"]} from backup source')
+        if not downloaded:
+            log_error(f'Error downloading {item["name"]}: all sources failed')
 
 # =========================== 授权文件执行权限 ===========================
 def authorize_files(file_names):
@@ -400,17 +411,17 @@ def generate_xray_config():
                     "clients": [{"id": UUID, "flow": "xtls-rprx-vision"}],
                     "decryption": "none",
                     "fallbacks": [
-                        {"dest": 3001},
-                        {"path": "/vless-argo", "dest": 3002},
-                        {"path": "/vmess-argo", "dest": 3003},
-                        {"path": "/trojan-argo", "dest": 3004}
+                        {"dest": 51001},
+                        {"path": "/vless-argo", "dest": 51002},
+                        {"path": "/vmess-argo", "dest": 51003},
+                        {"path": "/trojan-argo", "dest": 51004}
                     ]
                 },
                 "streamSettings": {"network": "tcp"}
             },
             {
                 "tag": "vless-tcp-in",
-                "port": 3001,
+                "port": 51001,
                 "listen": "127.0.0.1",
                 "protocol": "vless",
                 "settings": {
@@ -421,7 +432,7 @@ def generate_xray_config():
             },
             {
                 "tag": "vless-ws-in",
-                "port": 3002,
+                "port": 51002,
                 "listen": "127.0.0.1",
                 "protocol": "vless",
                 "settings": {
@@ -441,7 +452,7 @@ def generate_xray_config():
             },
             {
                 "tag": "vmess-ws-in",
-                "port": 3003,
+                "port": 51003,
                 "listen": "127.0.0.1",
                 "protocol": "vmess",
                 "settings": {
@@ -459,7 +470,7 @@ def generate_xray_config():
             },
             {
                 "tag": "trojan-ws-in",
-                "port": 3004,
+                "port": 51004,
                 "listen": "127.0.0.1",
                 "protocol": "trojan",
                 "settings": {
